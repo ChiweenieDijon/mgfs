@@ -51,10 +51,12 @@ type Dir struct {
 	name string
 }
 
-func (d Dir) Attr(a *fuse.Attr) {
+//changed by gene - add ctx param and err return value to Attr (to fulfill the fs.Node interface)
+func (d Dir) Attr(ctx context.Context, a *fuse.Attr) error {
 	log.Println("Dir.Attr() for ", d.name)
 	a.Inode = 1
 	a.Mode = os.ModeDir | 0555
+    return nil
 }
 
 func (Dir) Lookup(ctx context.Context, name string) (fs.Node, error) {
@@ -90,10 +92,13 @@ func (d Dir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 	defer s.Close()
 
 	names, err := db.CollectionNames()
+    log.Println("collection names:", names);
+    
 	if err != nil {
 		log.Panic(err)
 		return nil, fuse.EIO
 	}
+    
 
 	ents := make([]fuse.Dirent, 0, len(names)+1) // one more for GridFS
 

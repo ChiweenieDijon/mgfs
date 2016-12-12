@@ -18,6 +18,12 @@ func initDb(dbName, dbHost, dbPort, credentials string) {
 	checkErrorAndExit(err, 1)
 
 	log.Println("Dialed:", url)
+    dbNames, _ := mgoSession.DatabaseNames()
+    log.Println("DatabaseNames:", dbNames)
+    
+    theDB := mgoSession.DB(dbName)
+    collNames, _ := theDB.CollectionNames()
+    log.Println("CollectionNames:", collNames)
 
 	getDb = func() (*mgo.Database, *mgo.Session) {
 		s := mgoSession.Clone()

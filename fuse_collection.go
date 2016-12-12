@@ -27,11 +27,13 @@ func idQuery(id string) bson.M {
 	}
 }
 
-func (f CollFile) Attr(a *fuse.Attr) {
+//ctx param added by gene
+func (f CollFile) Attr(ctx context.Context, a *fuse.Attr) error {
 	log.Printf("CollFile.Attr() for: %+v", f)
 	a.Mode = os.ModeDir | 0700
 	a.Uid = uint32(os.Getuid())
 	a.Gid = uint32(os.Getgid())
+    return nil
 }
 
 func (c CollFile) Lookup(ctx context.Context, fname string) (fs.Node, error) {

@@ -22,7 +22,7 @@ type GridFsFile struct {
 	Fattr  fuse.Attr
 }
 
-func (g GridFsFile) Attr(a *fuse.Attr) {
+func (g GridFsFile) Attr(ctx context.Context, a *fuse.Attr) error {
 	log.Printf("GridFsFile.Attr() for: %+v", g)
 
 	db, s := getDb()
@@ -39,6 +39,7 @@ func (g GridFsFile) Attr(a *fuse.Attr) {
 	a.Ctime = file.UploadDate()
 	a.Atime = time.Now()
 	a.Mtime = file.UploadDate()
+    return nil
 }
 
 func (g GridFsFile) Lookup(ctx context.Context, fname string) (fs.Node, error) {
